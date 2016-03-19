@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
-    <title>Метки</title>
+    <title>Велосипедные парковки Москвы</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <script src="http://yandex.st/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -11,15 +11,39 @@
      <script src="src/heatmap.min.js"></script>
 
     <style type="text/css">
-        html, body, #map {
+        html, body, .wrap, #map {
             width: 100%;
             height: 100%;
 			margin: 0;
         }
+
+        .wrap {
+
+        }
+        .text {
+            color: #FFF;
+            font-size: 80px;
+            font-family: 'Arial Black';
+            padding: 20px 0 0 20px;
+            font-weight: bold;
+            line-height: 70px;
+            display: inline;
+            position: absolute;
+            z-index: 1;
+        }
+
+        #map {
+            display: block;
+            position: absolute;
+        }
+
     </style>
 </head>
 <body>
-    <div id="map"></div>
+    <div class="wrap">
+        <div class="text">DENSITY<br>BIKE<br>PARKINGS,<br>MOSCOW</div>
+        <div id="map"></div>
+    </div>
 <script language="javascript">
 ymaps.ready(function() {
 
@@ -58,6 +82,7 @@ ymaps.ready(function() {
 		});
 
 	});
+
 
 
 });
