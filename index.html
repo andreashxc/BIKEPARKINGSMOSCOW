@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
-    <title>Простые метки</title>
+    <title>Метки</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <script src="http://yandex.st/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&coordorder=longlat"></script>
+
+    <!-- вызов heatmap.min.js — модуля тепловых карт для API Яндекс.Карт — https://github.com/yandex/mapsapi-heatmap -->
+     <script src="src/heatmap.min.js"></script>
+
     <style type="text/css">
         html, body, #map {
             width: 100%;
@@ -22,23 +26,39 @@ ymaps.ready(function() {
 	//создаём карту с центром в Москве, на 11 масштабе с дефолтным набором элементов управления
 	var myMap = new ymaps.Map('map', {
 		center: [37.613853, 55.752639],
-		zoom: 13,
-		controls: ['default']
+		zoom: 12,
+		controls: [],
+        type: 'yandex#satellite'
 	});
 
-	//загружаем bikepoints.json с помощью jQuery
-	jQuery.getJSON('data/bikepoints.json', function(json) {
 
-		//в json файле есть массив features с геообъектами, обходим его
-		jQuery.each(json.features,function(i, feature) {
-			//добавляем на карту объект с координатами
-			myMap.geoObjects.add(new ymaps.Placemark(feature.geometry.coordinates, {
-			}, {
-				preset: 'islands#circleIcon', //стандартный пресет
-				iconColor: '#1faee9', //цвет метки из пресета
-	        }));
+    //загружаем bikepoints.json с помощью jQuery
+	jQuery.getJSON('http://api.data.mos.ru/v1/datasets/916/features', function(json) {
+        console.log(json.features);
+
+		//загружаем модуль тепловых карт
+		ymaps.modules.require(['Heatmap'], function (Heatmap) {
+
+			//создаём тепловую карту, указав, что нужно использовать данные из загруженного json
+			//var heatmap = new Heatmap(json); //добавление тепловой карты с дефолтными параметрами
+
+			//добавление тепловой карты с кастомными параметрами
+			var heatmap = new Heatmap(json, {
+				gradient: {
+                0.1: 'rgba(0,150,200,0.2)',
+                0.3: 'rgba(0,238,238,0.5)',
+                0.7: 'rgba(200,200,0,0.8)',
+                0.9: 'rgba(255,44,0,1)'
+            },
+				radius: 50
+			});
+
+			//добавляем тепловую карту на нашу карту
+			heatmap.setMap(myMap);
 		});
+
 	});
+
 
 });
 
