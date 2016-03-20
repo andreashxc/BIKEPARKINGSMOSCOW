@@ -7,7 +7,6 @@
     <script src="http://yandex.st/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&coordorder=longlat"></script>
 
-    <!-- вызов heatmap.min.js — модуля тепловых карт для API Яндекс.Карт — https://github.com/yandex/mapsapi-heatmap -->
      <script src="src/heatmap.min.js"></script>
 
     <style type="text/css">
@@ -31,6 +30,10 @@
             position: absolute;
             z-index: 1;
         }
+        
+        .city {
+        	font-size: 20px;
+        }
 
         #map {
             display: block;
@@ -41,13 +44,12 @@
 </head>
 <body>
     <div class="wrap">
-        <div class="text">BIKE<br>PARKINGS<br>DENSITY<br>IN MOSCOW</div>
+        <div class="text">BIKE<br>PARKINGS<br>DENSITY<br><div class="city">IN MOSCOW</div></div>
         <div id="map"></div>
     </div>
 <script language="javascript">
 ymaps.ready(function() {
 
-	//создаём карту с центром в Москве, на 11 масштабе с дефолтным набором элементов управления
 	var myMap = new ymaps.Map('map', {
 		center: [37.613853, 55.752639],
 		zoom: 12,
@@ -56,17 +58,11 @@ ymaps.ready(function() {
 	});
 
 
-    //загружаем bikepoints.json с помощью jQuery
 	jQuery.getJSON('http://api.data.mos.ru/v1/datasets/916/features', function(json) {
         console.log(json.features);
 
-		//загружаем модуль тепловых карт
 		ymaps.modules.require(['Heatmap'], function (Heatmap) {
 
-			//создаём тепловую карту, указав, что нужно использовать данные из загруженного json
-			//var heatmap = new Heatmap(json); //добавление тепловой карты с дефолтными параметрами
-
-			//добавление тепловой карты с кастомными параметрами
 			var heatmap = new Heatmap(json, {
 				gradient: {
                 0.1: 'rgba(0,150,200,0.2)',
@@ -77,7 +73,6 @@ ymaps.ready(function() {
 				radius: 50
 			});
 
-			//добавляем тепловую карту на нашу карту
 			heatmap.setMap(myMap);
 		});
 
